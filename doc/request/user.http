@@ -1,0 +1,8 @@
+### LOGIN
+POST {{protocol}}://{{host}}/api/{{version}}/user/sing-in 
+Content-Type: application/json
+
+{
+    "usuario": "m.ortega",
+    "contrasenia": "abc123**"
+}

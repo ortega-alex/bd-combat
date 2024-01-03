@@ -1,5 +1,6 @@
 export const PrivateRotes = {
     PRIVATE: 'private',
+    HOME: 'home',
     USER: 'user',
     ORDER: 'order'
 };

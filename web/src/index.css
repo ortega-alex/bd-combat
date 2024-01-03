@@ -1658,7 +1658,7 @@ body {
 }
 
 .navbar-dark {
-    background-color: var(--primary);
+    background-color: var(--secondary-dark);
 }
 
 .navbar-dark .nav-link {

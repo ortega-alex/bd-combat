@@ -1,6 +1,8 @@
 node_modules/
 src/public/
 
+dist
+
 .DS_Store
 .env
 .env.local
