@@ -1,0 +1,17 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": ["standard", "eslint-config-prettier"],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "camelcase": "off",
+        "no-unused-vars": "warn",
+        "eqeqeq": "warn",
+        "no-unneeded-ternary": "off"
+    }
+}
