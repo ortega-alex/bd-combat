@@ -1,39 +1,38 @@
 import { executeQuery } from '../utilities';
 
 export const getUsers = async () => {
-    const strQuery = `SELECT * FROM usuario ORDER BY nombre`;
+    const strQuery = `CALL sel_usuario(NULL, NULL, NULL)`;
     const res = await executeQuery(strQuery);
     if (res.error) throw res.error.sqlMessage;
     return res;
 };
 
 export const getUserById = async id_usuario => {
-    const strQuery = `SELECT * FROM usuario WHERE id_usuario = ?`;
+    const strQuery = `CALL sel_usuario(?, NULL, NULL)`;
     const res = await executeQuery(strQuery, [id_usuario]);
     if (res.error) throw res.error.sqlMessage;
-    return res.length > 0 ? res[0] : {};
+    return res.length > 0 ? res[0][0] : {};
 };
 
 export const getUserByUsername = async usuario => {
-    const strQuery = `  SELECT *,
-                        IF (estado = 1, 'Activo', 'Inactivo') AS _estado
-                        FROM usuario WHERE usuario = ?`;
+    const strQuery = `CALL sel_usuario(NULL, ?, NULL)`;
     const res = await executeQuery(strQuery, [usuario]);
     if (res.error) throw res.error.sqlMessage;
-    return res.length > 0 ? res[0] : null;
+    return res.length > 0 ? res[0][0] : null;
 };
 
-export const addOrUpdate = async ({ nombre, correo, usuario, contrasenia, estado = 1 }) => {
-    const strQuery = `  INTO usuario (nombre, correo, usuario, contrasenia) 
-                        VALUES (?, ?, ?, ?) AS val
+export const addOrUpdateUser = async ({ id_usuario, nombre, correo, usuario, contrasenia, estado = 1 }) => {
+    const strQuery = `  INSERT INTO usuario (id_usuario, nombre, correo, usuario, contrasenia) 
+                        VALUES (?, ?, ?, ?, ?) AS val
                         ON DUPLICATE KEY UPDATE
                         nombre = val.nombre,
                         correo = val.correo,
                         usuario = val.usuario,
                         contrasenia = val.contrasenia,
-                        estado = ?
+                        estado = ?,
                         fecha_edicion = CURRENT_TIMESTAMP()`;
-    const res = await executeQuery(strQuery, [nombre, correo, usuario, contrasenia, estado]);
+    console.log(strQuery);
+    const res = await executeQuery(strQuery, [id_usuario, nombre, correo, usuario, contrasenia, estado]);
     if (res.error) throw res.error.sqlMessage;
-    return res.insertId;
+    return res.affectedRows;
 };

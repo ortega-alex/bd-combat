@@ -4,7 +4,7 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
-import { publicRoute } from './routes';
+import { privateRoute, publicRoute } from './routes';
 
 const app = express();
 const httpServer = http.Server(app);
@@ -23,6 +23,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 // PUBLIC ROUTES
 app.use('/api/v1', publicRoute);
+app.use('/api/v1', privateRoute);
 
 // GLOBAL VARIABLES
 app.locals.io = io;

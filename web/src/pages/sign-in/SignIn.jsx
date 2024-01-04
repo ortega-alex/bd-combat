@@ -1,3 +1,4 @@
+import { sessionAdapter } from '@/adapters';
 import logo from '@/assets/media/logo.png';
 import { Icon } from '@/components';
 import { PrivateRotes } from '@/models/route';
@@ -19,10 +20,11 @@ export default function SignIn() {
         setLoading(true);
         httpSignIn(values)
             .then(res => {
-                message[res.error === true ? 'warning' : 'success'](res.message);
-                if (!res.error) {
-                    dispath(setSession(res));
-                    navigate(`${PrivateRotes.PRIVATE}`, { replace: true });
+                message[res?.error === true ? 'warning' : 'success'](res?.message);
+                if (!res?.error) {
+                    console.log(sessionAdapter(res.session));
+                    dispath(setSession({ session: sessionAdapter(res.session), token: res?.token }));
+                    navigate(`/${PrivateRotes.PRIVATE}`, { replace: true });
                 }
             })
             .catch(err => message.error(`http sign-in error: ${err.message}`))

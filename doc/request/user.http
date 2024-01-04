@@ -6,3 +6,25 @@ Content-Type: application/json
     "usuario": "m.ortega",
     "contrasenia": "abc123**"
 }
+
+### GET ALL
+GET {{protocol}}://{{host}}/api/{{version}}/users
+Content-Type: application/json
+
+
+### ADD OR UPDATE
+PUT {{protocol}}://{{host}}/api/{{version}}/user
+Content-Type: application/json
+
+{
+    "id_usuario": 1,
+    "nombre": "Marlon Ortega",
+    "correo": "mortegalex27@gmail.com",
+    "usuario": "m.ortega",
+    "contrasenia": "abc123**",
+    "contrasenia_actual": "abc123**",
+    "estado": "1",
+    "fecha_creacion": "2024-01-04T02:47:36.000Z",
+    "fecha_edicion": null,
+    "_estado": "Actuvo"
+}
