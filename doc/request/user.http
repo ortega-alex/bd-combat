@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ### GET ALL
-GET {{protocol}}://{{host}}/api/{{version}}/users
+GET {{protocol}}://{{host}}/api/{{version}}/user
 Content-Type: application/json
 
 

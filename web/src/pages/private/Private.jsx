@@ -1,8 +1,10 @@
 import { Icon, Loading, Nav, RoutesWithNotFound } from '@/components';
 import { PrivateRotes } from '@/models/route';
 import { Menu } from 'antd';
-import { useState } from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import { lazy, useState } from 'react';
+import { Link, Navigate, Route } from 'react-router-dom';
+
+const User = lazy(() => import('./maintenance/user/User'));
 
 export default function Private() {
     const [loading, setLoading] = useState(false);
@@ -10,8 +12,19 @@ export default function Private() {
     const items = [
         {
             key: 1,
-            icon: <Icon.User />,
-            label: 'Usuarios'
+            icon: <Icon.Cog size='1.5rem' />,
+            label: 'Mantenimientos',
+            children: [
+                {
+                    key: '1-1',
+                    icon: <Icon.User />,
+                    label: (
+                        <Link to={PrivateRotes.USER}>
+                            <span>Usuarios</span>
+                        </Link>
+                    )
+                }
+            ]
         }
     ];
 
@@ -41,6 +54,7 @@ export default function Private() {
                                 </div>
                             }
                         />
+                        <Route path={PrivateRotes.USER} element={<User />} />
                     </RoutesWithNotFound>
                 )}
             </div>

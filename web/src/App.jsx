@@ -29,6 +29,18 @@ export default function App() {
                                 colorPrimary: colors.primary,
                                 colorError: colors.danger,
                                 borderRadius: 10
+                            },
+                            components: {
+                                Menu: {
+                                    itemColor: colors?.secondary,
+                                    itemSelectedColor: colors?.secondaryDark
+                                },
+                                Table: {
+                                    headerBg: colors.primary
+                                },
+                                Button: {
+                                    primaryColor: colors.secondary
+                                }
                             }
                         }}
                     >

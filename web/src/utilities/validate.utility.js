@@ -7,3 +7,10 @@ export const passwordIsValid = (password, currentPass = null) => {
     if (!passRegExp.test(password)) return 'La contraseña debe tener al menos una letra mayúscula, una letra minúscula y un número';
     return null;
 };
+
+export const mailIsValied = mail => {
+    if (!mail || String(mail).trim() === '') return 'Correo vacío';
+    const emailRegExp = /^(([^<>()[\],;:\s@"]+(\.[^<>()[\],;:\s@"]+)*)|(".+"))@(([^<>()[\],;:\s@"]+\.)+[^<>()[\],;:\s@"]{2,})$/;
+    if (!emailRegExp.test(mail.trim())) return 'Correo no valido.';
+    return null;
+};

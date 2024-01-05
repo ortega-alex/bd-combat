@@ -4,7 +4,7 @@ export const getUsers = async () => {
     const strQuery = `CALL sel_usuario(NULL, NULL, NULL)`;
     const res = await executeQuery(strQuery);
     if (res.error) throw res.error.sqlMessage;
-    return res;
+    return res[0];
 };
 
 export const getUserById = async id_usuario => {

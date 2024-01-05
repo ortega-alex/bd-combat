@@ -15,3 +15,9 @@ export const httpSignIn = async body => await httpRequest(`${path}/sing-in`, { b
  * @returns {Promise}
  */
 export const httpAddOrUpdateUser = async body => await httpRequest(path, { body, method: 'PUT' });
+
+/**
+ *
+ * @returns {Promise}
+ */
+export const httpGetAllUsers = async () => await httpRequest(path);
