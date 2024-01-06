@@ -7,9 +7,9 @@
             "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9vY2FjYWxsLmNvbSIsImF1ZCI6Imh0dHA6XC9cL29jYWNhbGwuY29tIiwiZGF0YSI6IjM2MTQiLCJpYXQiOjE3MDM3NzUzNjksImV4cCI6MTcwNjM2NzM2OX0.wHiD4kQ0wUg4zpMQmNc0MkDyoJ2g_OKrno7IuijVTII"
         },
         "dev": {
-            "protocol":"http",
-            "version": "v1",
-            "host": "172.29.9.194/dev/sistema-oca",
+           "protocol":"http",
+           "version": "v1",
+           "host": "54.89.153.193:4000",
            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9vY2FjYWxsLmNvbSIsImF1ZCI6Imh0dHA6XC9cL29jYWNhbGwuY29tIiwiZGF0YSI6IjM2MTQiLCJpYXQiOjE3MDI0ODU2NDMsImV4cCI6MTcwNTA3NzY0M30.WQu6BnldmEkTWbny-3ZoF6RXXaCJ4R2rcByCupaDviA"
         },
         "production": {

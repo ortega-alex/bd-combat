@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
     "usuario": "m.ortega",
-    "contrasenia": "abc123**"
+    "contrasenia": "Abc123**"
 }
 
 ### GET ALL
@@ -17,14 +17,9 @@ PUT {{protocol}}://{{host}}/api/{{version}}/user
 Content-Type: application/json
 
 {
-    "id_usuario": 1,
-    "nombre": "Marlon Ortega",
-    "correo": "mortegalex27@gmail.com",
-    "usuario": "m.ortega",
-    "contrasenia": "abc123**",
-    "contrasenia_actual": "abc123**",
-    "estado": "1",
-    "fecha_creacion": "2024-01-04T02:47:36.000Z",
-    "fecha_edicion": null,
-    "_estado": "Actuvo"
+    "id_usuario": 2,
+    "nombre": "Invitado Pruebas",
+    "correo": "pruebas@gmail.com",
+    "usuario": "invitado",
+    "estado": "1"
 }

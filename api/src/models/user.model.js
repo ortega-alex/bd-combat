@@ -1,24 +1,31 @@
 import { executeQuery } from '../utilities';
 
 export const getUsers = async () => {
-    const strQuery = `CALL sel_usuario(NULL, NULL, NULL)`;
+    const strQuery = `  SELECT *, 
+                            IF (estado = 1, 'Actuvo', 'Inactivo') AS _estado
+                        FROM usuario 
+                        ORDER BY nombre;`;
     const res = await executeQuery(strQuery);
     if (res.error) throw res.error.sqlMessage;
-    return res[0];
+    return res;
 };
 
 export const getUserById = async id_usuario => {
-    const strQuery = `CALL sel_usuario(?, NULL, NULL)`;
+    const strQuery = `  SELECT * 
+                        FROM usuario 
+                        WHERE id_usuario = ?;`;
     const res = await executeQuery(strQuery, [id_usuario]);
     if (res.error) throw res.error.sqlMessage;
-    return res.length > 0 ? res[0][0] : {};
+    return res.length > 0 ? res[0] : {};
 };
 
 export const getUserByUsername = async usuario => {
-    const strQuery = `CALL sel_usuario(NULL, ?, NULL)`;
+    const strQuery = `  SELECT * 
+                        FROM usuario 
+                        WHERE usuario = ?;`;
     const res = await executeQuery(strQuery, [usuario]);
     if (res.error) throw res.error.sqlMessage;
-    return res.length > 0 ? res[0][0] : null;
+    return res.length > 0 ? res[0] : null;
 };
 
 export const addOrUpdateUser = async ({ id_usuario, nombre, correo, usuario, contrasenia, estado = 1 }) => {

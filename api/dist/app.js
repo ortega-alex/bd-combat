@@ -30,6 +30,7 @@ app.use(_express["default"]["static"](_path["default"].join(__dirname, '/public'
 
 // PUBLIC ROUTES
 app.use('/api/v1', _routes.publicRoute);
+app.use('/api/v1', _routes.privateRoute);
 
 // GLOBAL VARIABLES
 app.locals.io = io;
