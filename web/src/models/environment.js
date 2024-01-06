@@ -11,7 +11,6 @@ if (process.env.NODE_ENV === 'development') {
 export const _SERVER = {
     baseUrl: domain,
     apiUrl: `${domain}api/${version}`,
-    publicUrl: `${domain}api/public`,
     socket: `//${process.env.DOMAIN_API + process.env.NODE_PORT || window.location.hostname + ':4000'}/`
 };
 

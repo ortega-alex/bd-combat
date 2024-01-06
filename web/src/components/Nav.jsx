@@ -73,7 +73,7 @@ export default function Nav() {
                         gap={3}
                         size={60}
                         style={{ background: sessionState?.imagen ? colors.white : colors.purple }}
-                        src={sessionState?.imagen > 0 ? `${_SERVER.baseUrl}${sessionState?.imagen}` : null}
+                        src={sessionState?.imagen ? `${_SERVER.baseUrl}${sessionState?.imagen}` : null}
                         onClick={() => setDrawer(true)}
                         className='zoom'
                     >
@@ -104,7 +104,7 @@ export default function Nav() {
                         gap={3}
                         size={150}
                         style={{ background: sessionState?.imagen ? colors.white : colors.purple }}
-                        src={sessionState?.imagen > 0 ? `${_SERVER.baseUrl}${sessionState?.imagen}` : null}
+                        src={sessionState?.imagen ? `${_SERVER.baseUrl}${sessionState?.imagen}` : null}
                     >
                         {sessionState?.abreviatura}
                     </Avatar>

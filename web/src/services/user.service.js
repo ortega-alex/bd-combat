@@ -1,4 +1,4 @@
-import { httpRequest } from '@/utilities';
+import { _POST_FORMDATA, httpRequest } from '@/utilities';
 
 const path = '/user';
 
@@ -14,7 +14,7 @@ export const httpSignIn = async body => await httpRequest(`${path}/sing-in`, { b
  * @param {Object} body
  * @returns {Promise}
  */
-export const httpAddOrUpdateUser = async body => await httpRequest(path, { body, method: 'PUT' });
+export const httpAddOrUpdateUser = async body => await _POST_FORMDATA(path, body);
 
 /**
  *

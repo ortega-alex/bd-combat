@@ -1,5 +1,6 @@
 import { _KEYS, _SERVER } from '@/models';
 import axios from 'axios';
+import { getStorage } from './store.utility';
 const timeout = 20000;
 
 /**
@@ -32,7 +33,7 @@ export const _POST_FORMDATA = async (path, body = {}) => {
         return await fetch(_SERVER.apiUrl + path, {
             method: 'POST',
             headers: {
-                'Content-Type': 'multipart/form-data',
+                // 'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${token}`
             },
             body: data,

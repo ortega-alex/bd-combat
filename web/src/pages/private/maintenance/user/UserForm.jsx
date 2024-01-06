@@ -1,21 +1,34 @@
 import { Icon } from '@/components';
 import { _SERVER, colors } from '@/models';
+import { httpAddOrUpdateUser } from '@/services/user.service';
 import { mailIsValied } from '@/utilities';
-import { Avatar, Button, Form, Input, Switch, Upload } from 'antd';
+import { Avatar, Button, Form, Input, Switch, Upload, message } from 'antd';
 import React, { useRef, useState } from 'react';
 
-export default function UserForm({ user }) {
+export default function UserForm({ user, onClose }) {
     const formRef = useRef();
 
     const [image, setImage] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const handleOnSubmit = values => {
-        console.log(values);
+        setLoading(true);
+        httpAddOrUpdateUser({
+            ...user,
+            ...values,
+            nueva_imagen: values?.avatar?.file?.originFileObj
+        })
+            .then(res => {
+                message[res.error === false ? 'success' : 'warning'](res.message);
+                if (res.error === false) onClose(res.usuario);
+            })
+            .catch(err => message.error(`http erro add or update user: ${err.message}`))
+            .finally(() => setLoading(false));
     };
 
     return (
         <Form layout='vertical' onFinish={handleOnSubmit} initialValues={user} ref={formRef}>
-            <Form.Item name='file' valuePropName='file'>
+            <Form.Item name='avatar' valuePropName='file'>
                 <Upload
                     accept='.jpg, .png'
                     customRequest={({ file, onSuccess }) => {
@@ -27,7 +40,7 @@ export default function UserForm({ user }) {
                     className='avatar-uploader zoom'
                 >
                     <center>
-                        <Avatar size={150} src={image ? URL.createObjectURL(image) : _SERVER.publicUrl + user.imagen}>
+                        <Avatar size={150} src={image ? URL.createObjectURL(image) : _SERVER.baseUrl + user?.imagen}>
                             <Icon.Image size={80} style={{ marginTop: 30 }} color={colors.white} />
                         </Avatar>
                     </center>
@@ -76,7 +89,7 @@ export default function UserForm({ user }) {
                 <Switch defaultChecked checkedChildren='Activo' unCheckedChildren='Inactivo' />
             </Form.Item>
             <div className='text-right'>
-                <Button type='primary' htmlType='submit'>
+                <Button type='primary' htmlType='submit' loading={loading} disabled={loading}>
                     Guardar
                 </Button>
             </div>

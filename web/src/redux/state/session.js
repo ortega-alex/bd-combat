@@ -14,7 +14,11 @@ export const sessionSlice = createSlice({
             saveStorage(_KEYS.SESSION, session);
             return session;
         },
-        modifySession: (state, action) => ({ ...state, ...action.payload }),
+        modifySession: (state, action) => {
+            const session = { ...state, ...action.payload };
+            saveStorage(_KEYS.SESSION, session);
+            return session;
+        },
         resetSession: () => {
             clearStorage(_KEYS.SESSION);
             clearStorage(_KEYS.TOKEN);

@@ -1,37 +1,19 @@
 import { Icon } from '@/components';
-import { httpGetAllUsers } from '@/services/user.service';
 import { getDateFormat } from '@/utilities';
-import { Button, Modal, Table, Tooltip, message } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { UserForm } from '.';
-import { useDispatch, useSelector } from 'react-redux';
-import { modifySession } from '@/redux';
-import { sessionAdapter } from '@/adapters';
+import { Button, Input, Table, Tooltip } from 'antd';
+import React, { useState } from 'react';
 
-export default function User() {
-    const sessionState = useSelector(store => store.session);
-    const dispath = useDispatch();
-
-    const [users, setUsers] = useState([]);
-    const [user, setUser] = useState({});
+export default function Order() {
     const [modal, setModal] = useState(false);
+    const [Order, setOrder] = useState({});
+    const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 100
     });
 
-    const handleGetAll = () => {
-        setLoading(true);
-        httpGetAllUsers()
-            .then(res => setUsers(res))
-            .catch(err => message.error(`http error get all user: ${err.message}`))
-            .finally(() => setLoading(false));
-    };
-
-    useEffect(() => {
-        handleGetAll();
-    }, []);
+    const handleGetAll = () => {};
 
     return (
         <div className='container h-100 flex flex-column'>
@@ -40,12 +22,13 @@ export default function User() {
                     <Tooltip title='Actualizar'>
                         <Button type='link' className='text-secondary' icon={<Icon.Reload />} onClick={handleGetAll} />
                     </Tooltip>
-                    <p className='h5'>Usuarios</p>
+                    <p className='h5'>Ordenes</p>
                 </div>
+                <Input prefix={<Icon.Search />} placeholder='Buscar' style={{ maxWidth: 300 }} />
                 <Button
                     type='primary'
                     onClick={() => {
-                        setUser({});
+                        setOrder({});
                         setModal(true);
                     }}
                 >
@@ -65,14 +48,14 @@ export default function User() {
                 scrollToFirstRowOnChange={true}
                 loading={loading}
                 showSorterTooltip={false}
-                rowKey='id_usuario'
-                dataSource={users}
+                rowKey='id_orden'
+                dataSource={orders}
                 columns={[
-                    { title: 'No.', dataIndex: 'id_usuario' },
-                    { title: 'Nombre.', dataIndex: 'nombre' },
-                    { title: 'Correo.', dataIndex: 'correo' },
-                    { title: 'Usuario.', dataIndex: 'usuario' },
-                    { title: 'Estado.', dataIndex: '_estado' },
+                    { title: 'No.', dataIndex: 'id_inventario' },
+                    { title: 'Productos', dataIndex: 'productos' },
+                    { title: 'Total.', dataIndex: 'total' },
+                    { title: 'Cliente', dataIndex: 'cliente' },
+                    { title: 'Direccion', dataIndex: 'direccion' },
                     { title: 'Fecha', dataIndex: 'fecha_creacion', render: value => <span>{getDateFormat(value, 'DD/MM/YYYY')}</span> },
                     {
                         title: 'Opciones',
@@ -93,26 +76,6 @@ export default function User() {
                     }
                 ]}
             />
-
-            <Modal
-                title={<p className='h5'>{user?.id_usuario ? 'Editar' : 'Agregar'} Usuario</p>}
-                open={modal}
-                centered
-                footer={null}
-                destroyOnClose
-                maskClosable={false}
-                onCancel={() => setModal(false)}
-            >
-                <UserForm
-                    user={user}
-                    onClose={usuario => {
-                        if (usuario.id_usuario && Number(usuario.id_usuario) === sessionState.id_sesion)
-                            dispath(modifySession(sessionAdapter(usuario)));
-                        handleGetAll();
-                        setModal(false);
-                    }}
-                />
-            </Modal>
         </div>
     );
 }

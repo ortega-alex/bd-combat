@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt';
-import { addOrUpdateUser, getUserById, getUserByUsername, getUsers } from '../models/user.model';
-import { generateToken } from '../middleware';
+import fs from 'fs';
 import moment from 'moment';
+import { generateToken } from '../middleware';
+import { addOrUpdateUser, getUserById, getUserByUsername, getUsers } from '../models/user.model';
+import path from 'path';
 
 export const login = async (req, res) => {
     try {
@@ -34,23 +36,48 @@ export const getAll = async (_, res) => {
 
 export const addOrUpdate = async (req, res) => {
     try {
-        const { id_usuario, nombre, correo, usuario, contrasenia, contrasenia_actual } = req.body;
+        const { file, body } = req;
+        const { id_usuario, nombre, correo, usuario, contrasenia, contrasenia_actual, imagen } = body;
+        let _imagen = null;
+        if (file) {
+            _imagen = `${file.path.replace(/\\/g, '/').split('public')[1]}`;
+            if (imagen && imagen !== 'null') fs.unlinkSync(path.join(__dirname, `../public${imagen}`));
+        } else if (imagen && imagen !== 'null') {
+            _imagen = imagen;
+        }
 
         if (!nombre) return res.status(203).json({ error: true, message: 'El nombre es requerido' });
         if (!correo) return res.status(203).json({ error: true, message: 'El correo es requerido' });
         if (!usuario) return res.status(203).json({ error: true, message: 'El usuario es requerido' });
 
-        if (id_usuario && contrasenia_actual) {
+        let encodePass = null;
+        if (id_usuario) {
             const user = await getUserById(id_usuario);
-            const match = bcrypt.compareSync(contrasenia_actual, user.contrasenia);
-            if (!match) return res.status(203).json({ error: true, message: 'Contraseña actual incorecta' });
+            encodePass = user.contrasenia;
+            if (!_imagen) _imagen = user.imagen;
+            if (contrasenia_actual) {
+                const match = bcrypt.compareSync(contrasenia_actual, encodePass);
+                if (!match) return res.status(203).json({ error: true, message: 'Contraseña actual incorecta' });
+            }
+            if (contrasenia) {
+                const match = bcrypt.compareSync(contrasenia, encodePass);
+                if (!match) encodePass = bcrypt.hashSync(contrasenia, 8);
+            }
+        } else {
+            encodePass = bcrypt.hashSync(contrasenia ?? `combat-${moment().format('YYYY')}`, 8);
         }
-        const encodePass = bcrypt.hashSync(contrasenia ?? `combat-${moment().format('YYYY')}`, 8);
-        const affectedRows = await addOrUpdateUser({ ...req.body, contrasenia: encodePass });
+
+        const _user = {
+            ...body,
+            contrasenia: encodePass,
+            imagen: _imagen
+        };
+        const affectedRows = await addOrUpdateUser(_user);
         const error = affectedRows > 0 ? false : true;
         const title = id_usuario ? 'editar' : 'agregar';
         res.status(200).json({
             error,
+            usuario: _user,
             message: error ? `No se pudo ${title} el usuario` : `Usuario ${title} correctamente`
         });
     } catch (error) {

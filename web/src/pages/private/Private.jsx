@@ -1,22 +1,43 @@
 import { Icon, Loading, Nav, RoutesWithNotFound } from '@/components';
+import { colors } from '@/models';
 import { PrivateRotes } from '@/models/route';
 import { Menu } from 'antd';
 import { lazy, useState } from 'react';
 import { Link, Navigate, Route } from 'react-router-dom';
 
 const User = lazy(() => import('./maintenance/user/User'));
+const Order = lazy(() => import('./order/Order'));
+const Inventory = lazy(() => import('./inventory/Inventory'));
 
 export default function Private() {
     const [loading, setLoading] = useState(false);
 
     const items = [
         {
-            key: 1,
+            key: '3',
+            icon: <Icon.SocialDropbox size='1.5rem' />,
+            label: (
+                <Link to={PrivateRotes.INVENTORY}>
+                    <span>Inventario</span>
+                </Link>
+            )
+        },
+        {
+            key: '1',
+            icon: <Icon.ShoppingBasket size='1.5rem' />,
+            label: (
+                <Link to={PrivateRotes.ORDER}>
+                    <span>Ordenes</span>
+                </Link>
+            )
+        },
+        {
+            key: '2',
             icon: <Icon.Cog size='1.5rem' />,
             label: 'Mantenimientos',
             children: [
                 {
-                    key: '1-1',
+                    key: '2-1',
                     icon: <Icon.User />,
                     label: (
                         <Link to={PrivateRotes.USER}>
@@ -35,7 +56,7 @@ export default function Private() {
                 <div className='flex items-center'>
                     <Menu
                         mode='inline'
-                        className='bg-primary text-white'
+                        className='bg-primary text-secondary'
                         inlineCollapsed={true}
                         style={{ width: '2.5em', fontSize: '1.5rem', borderRadius: '0 8px 8px 0', padding: '16px 0px' }}
                         items={items}
@@ -55,6 +76,8 @@ export default function Private() {
                             }
                         />
                         <Route path={PrivateRotes.USER} element={<User />} />
+                        <Route path={PrivateRotes.ORDER} element={<Order />} />
+                        <Route path={PrivateRotes.INVENTORY} element={<Inventory />} />
                     </RoutesWithNotFound>
                 )}
             </div>

@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
     "usuario": "m.ortega",
-    "contrasenia": "Abc123**"
+    "contrasenia": "abc123**"
 }
 
 ### GET ALL
@@ -13,13 +13,14 @@ Content-Type: application/json
 
 
 ### ADD OR UPDATE
-PUT {{protocol}}://{{host}}/api/{{version}}/user
+POST {{protocol}}://{{host}}/api/{{version}}/user
 Content-Type: application/json
 
 {
-    "id_usuario": 2,
-    "nombre": "Invitado Pruebas",
-    "correo": "pruebas@gmail.com",
-    "usuario": "invitado",
-    "estado": "1"
+    "id_usuario": 1,
+    "nombre": "Marlon Ortega",
+    "correo": "mortegalex27@gmail.com",
+    "usuario": "m.ortega",
+    "contrasenia": "abc123**",
+    "estado": 1
 }

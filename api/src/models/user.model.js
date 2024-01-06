@@ -1,7 +1,8 @@
 import { executeQuery } from '../utilities';
 
 export const getUsers = async () => {
-    const strQuery = `  SELECT *, 
+    const strQuery = `  SELECT id_usuario, nombre, correo, usuario, estado, 
+                            fecha_creacion, imagen,
                             IF (estado = 1, 'Actuvo', 'Inactivo') AS _estado
                         FROM usuario 
                         ORDER BY nombre;`;
@@ -28,7 +29,7 @@ export const getUserByUsername = async usuario => {
     return res.length > 0 ? res[0] : null;
 };
 
-export const addOrUpdateUser = async ({ id_usuario, nombre, correo, usuario, contrasenia, estado = 1 }) => {
+export const addOrUpdateUser = async ({ id_usuario, nombre, correo, usuario, contrasenia, estado = 1, imagen }) => {
     const strQuery = `  INSERT INTO usuario (id_usuario, nombre, correo, usuario, contrasenia) 
                         VALUES (?, ?, ?, ?, ?) AS val
                         ON DUPLICATE KEY UPDATE
@@ -37,9 +38,9 @@ export const addOrUpdateUser = async ({ id_usuario, nombre, correo, usuario, con
                         usuario = val.usuario,
                         contrasenia = val.contrasenia,
                         estado = ?,
+                        imagen = ?,
                         fecha_edicion = CURRENT_TIMESTAMP()`;
-    console.log(strQuery);
-    const res = await executeQuery(strQuery, [id_usuario, nombre, correo, usuario, contrasenia, estado]);
+    const res = await executeQuery(strQuery, [id_usuario, nombre, correo, usuario, contrasenia, estado, imagen]);
     if (res.error) throw res.error.sqlMessage;
     return res.affectedRows;
 };

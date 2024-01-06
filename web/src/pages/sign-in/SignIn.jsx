@@ -22,7 +22,6 @@ export default function SignIn() {
             .then(res => {
                 message[res?.error === true ? 'warning' : 'success'](res?.message);
                 if (!res?.error) {
-                    console.log(sessionAdapter(res.session));
                     dispath(setSession({ session: sessionAdapter(res.session), token: res?.token }));
                     navigate(`/${PrivateRotes.PRIVATE}`, { replace: true });
                 }
