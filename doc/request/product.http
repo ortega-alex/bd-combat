@@ -1,0 +1,12 @@
+### GET ALL
+GET {{protocol}}://{{host}}/api/{{version}}/product
+Content-Type: application/json
+
+### ADD OR UPDATE
+POST  {{protocol}}://{{host}}/api/{{version}}/product
+Content-Type: application/json
+
+{
+    "id_producto": null,
+    "producto": "Guantes"
+}

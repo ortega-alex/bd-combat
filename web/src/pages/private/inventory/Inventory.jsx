@@ -1,7 +1,9 @@
 import { Icon } from '@/components';
-import { Button, Form, Input, Modal, Table, Tooltip, Upload } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Input, Modal, Table, Tooltip, Upload, message } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { InventoryForm } from '.';
+import { httpGetInventory } from '@/services';
+import { getDateFormat } from '@/utilities';
 
 export default function Inventory() {
     const [inventory, setInventory] = useState({});
@@ -18,7 +20,17 @@ export default function Inventory() {
 
     const handleOnChangeModal = (name, value = true) => setModals({ ...modals, [name]: value });
 
-    const handleGetAll = () => {};
+    const handleGetAll = () => {
+        setLoading(true);
+        httpGetInventory()
+            .then(res => setInventories(res))
+            .catch(err => message.error(`http get inventories: ${err.message}`))
+            .finally(() => setLoading(false));
+    };
+
+    useEffect(() => {
+        handleGetAll();
+    }, []);
 
     return (
         <div className='container h-100 flex flex-column'>
@@ -70,7 +82,7 @@ export default function Inventory() {
                 columns={[
                     { title: 'No.', dataIndex: 'id_inventario' },
                     { title: 'Producto', dataIndex: 'producto' },
-                    { title: 'Disponible.', dataIndex: 'disponible' },
+                    { title: 'Disponible.', dataIndex: 'cantidad' },
                     { title: 'Precio Venta.', dataIndex: 'precio_venta' },
                     { title: 'Medida', dataIndex: 'medida' },
                     { title: 'Color', dataIndex: 'color' },
@@ -85,8 +97,8 @@ export default function Inventory() {
                                     type='primary'
                                     size='small'
                                     onClick={() => {
-                                        setUser(item);
-                                        setModal(true);
+                                        setInventory(item);
+                                        handleOnChangeModal('form');
                                     }}
                                 />
                             </div>
