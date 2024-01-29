@@ -5,9 +5,11 @@ import { Menu } from 'antd';
 import { lazy, useState } from 'react';
 import { Link, Navigate, Route } from 'react-router-dom';
 
-const User = lazy(() => import('./maintenance/user/User'));
 const Order = lazy(() => import('./order/Order'));
 const Inventory = lazy(() => import('./inventory/Inventory'));
+
+const User = lazy(() => import('./maintenance/user/User'));
+const Position = lazy(() => import('./maintenance/position/Position'));
 
 export default function Private() {
     const [loading, setLoading] = useState(false);
@@ -44,6 +46,15 @@ export default function Private() {
                             <span>Usuarios</span>
                         </Link>
                     )
+                },
+                {
+                    key: '2-2',
+                    icon: <Icon.UserStar />,
+                    label: (
+                        <Link to={PrivateRotes.POSITION}>
+                            <span>Puesto</span>
+                        </Link>
+                    )
                 }
             ]
         }
@@ -78,6 +89,7 @@ export default function Private() {
                         <Route path={PrivateRotes.USER} element={<User />} />
                         <Route path={PrivateRotes.ORDER} element={<Order />} />
                         <Route path={PrivateRotes.INVENTORY} element={<Inventory />} />
+                        <Route path={PrivateRotes.POSITION} element={<Position />} />
                     </RoutesWithNotFound>
                 )}
             </div>

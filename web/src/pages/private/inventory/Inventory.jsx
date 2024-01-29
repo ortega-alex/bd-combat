@@ -75,6 +75,7 @@ export default function Inventory() {
                     onShowSizeChange: (current, pageSize) => setPagination({ current, pageSize })
                 }}
                 scrollToFirstRowOnChange={true}
+                scroll={{ x: 1200, y: window.innerHeight / 2 }}
                 loading={loading}
                 showSorterTooltip={false}
                 rowKey='id_inventario'

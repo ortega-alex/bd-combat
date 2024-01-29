@@ -1,0 +1,12 @@
+### GET ALL
+GET {{protocol}}://{{host}}/api/{{version}}/position
+Content-Type: application/json
+
+### ADD OR UPDATE
+POST  {{protocol}}://{{host}}/api/{{version}}/position
+Content-Type: application/json
+
+{
+    "id_puesto": null,
+    "puesto": "Vendedor"
+}

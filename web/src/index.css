@@ -375,7 +375,7 @@ body {
 
 .line-divide {
     font-size: 12px !important;
-    color: var(--white-dark);
+    color: var(--secondary-dark) !important;
     font-weight: 700;
 }
 

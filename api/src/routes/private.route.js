@@ -4,11 +4,13 @@ import {
     addOrUpdateColorCtr,
     addOrUpdateInventoryCtr,
     addOrUpdateMeasureCtr,
+    addOrUpdatePositionCtr,
     addOrUpdateProductCtr,
     getAll,
     getAllColorCtr,
     getAllInventoryCtr,
     getAllMeasureCtr,
+    getAllPositionsCtr,
     getAllProductsCtr
 } from '../comtrolles';
 import { imagenUpload } from '../middleware';
@@ -28,5 +30,8 @@ route.post('/color', addOrUpdateColorCtr);
 
 route.get('/inventory', getAllInventoryCtr);
 route.post('/inventory', addOrUpdateInventoryCtr);
+
+route.get('/position', getAllPositionsCtr);
+route.post('/position', addOrUpdatePositionCtr);
 
 export default route;

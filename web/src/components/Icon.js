@@ -3,9 +3,10 @@ import { BiCog, BiEdit, BiImageAdd } from 'react-icons/bi';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import { CgArrowsExchangeAlt } from 'react-icons/cg';
 import { CiShoppingBasket } from 'react-icons/ci';
-import { FaPlus, FaUser } from 'react-icons/fa';
+import { FaPlus, FaRegTrashAlt, FaUser } from 'react-icons/fa';
 import { IoReloadOutline } from 'react-icons/io5';
 import { SlSocialDropbox } from 'react-icons/sl';
+import { TbUserStar } from 'react-icons/tb';
 import { TiAttachment } from 'react-icons/ti';
 
 export const Icon = {
@@ -25,5 +26,7 @@ export const Icon = {
     Search: AiOutlineSearch,
     ShoppingBasket: CiShoppingBasket,
     SocialDropbox: SlSocialDropbox,
-    User: FaUser
+    TrashAlt: FaRegTrashAlt,
+    User: FaUser,
+    UserStar: TbUserStar
 };

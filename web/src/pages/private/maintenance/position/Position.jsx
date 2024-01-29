@@ -1,44 +1,30 @@
 import { Icon } from '@/components';
-import { getDateFormat } from '@/utilities';
-import { Button, Input, Modal, Table, Tooltip } from 'antd';
+import { Button, Modal, Table, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { OrderForm } from '.';
+import { PositionForm } from '.';
+import { httpGetPositions } from '@/services';
+import { getDateFormat } from '@/utilities';
 
-const data = [
-    {
-        sku: '1212323',
-        nombre: 'producto x',
-        resumen: 'producto x | mediano | negro',
-        medida: 'grande',
-        color: 'negro',
-        precio: 100
-    },
-    {
-        sku: '3453454',
-        nombre: 'producto y',
-        resumen: 'producto y | mediano | azul',
-        medida: 'grande',
-        color: 'azul',
-        precio: 120
-    }
-];
-
-export default function Order() {
+export default function Position() {
+    const [positions, setPositions] = useState([]);
+    const [position, setPosition] = useState({});
     const [modal, setModal] = useState(false);
-    const [order, setOrder] = useState({});
-    const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 100
     });
-    const [products, setProducts] = useState(data);
 
-    const handleGetAll = () => {};
+    const handleGetAll = () => {
+        setLoading(true);
+        httpGetPositions()
+            .then(res => setPositions(res))
+            .catch(err => message.error(`http error get position: ${err.message}`))
+            .finally(() => setLoading(false));
+    };
 
     useEffect(() => {
         handleGetAll();
-        setProducts(data);
     }, []);
 
     return (
@@ -48,13 +34,12 @@ export default function Order() {
                     <Tooltip title='Actualizar'>
                         <Button type='link' className='text-secondary' icon={<Icon.Reload />} onClick={handleGetAll} />
                     </Tooltip>
-                    <p className='h5'>Ordenes</p>
+                    <p className='h5'>Puestos</p>
                 </div>
-                <Input prefix={<Icon.Search />} placeholder='Buscar' style={{ maxWidth: 300 }} />
                 <Button
                     type='primary'
                     onClick={() => {
-                        setOrder({});
+                        setPosition({});
                         setModal(true);
                     }}
                 >
@@ -74,14 +59,12 @@ export default function Order() {
                 scrollToFirstRowOnChange={true}
                 loading={loading}
                 showSorterTooltip={false}
-                rowKey='id_orden'
-                dataSource={orders}
+                rowKey='id_puesto'
+                dataSource={positions}
                 columns={[
-                    { title: 'No.', dataIndex: 'id_inventario' },
-                    { title: 'Productos', dataIndex: 'productos' },
-                    { title: 'Total.', dataIndex: 'total' },
-                    { title: 'Cliente', dataIndex: 'cliente' },
-                    { title: 'Direccion', dataIndex: 'direccion' },
+                    { title: 'No.', dataIndex: 'id_puesto' },
+                    { title: 'Puesto.', dataIndex: 'puesto' },
+                    { title: 'Estado.', dataIndex: '_estado' },
                     { title: 'Fecha', dataIndex: 'fecha_creacion', render: value => <span>{getDateFormat(value, 'DD/MM/YYYY')}</span> },
                     {
                         title: 'Opciones',
@@ -93,7 +76,7 @@ export default function Order() {
                                     type='primary'
                                     size='small'
                                     onClick={() => {
-                                        setUser(item);
+                                        setPosition(item);
                                         setModal(true);
                                     }}
                                 />
@@ -104,15 +87,21 @@ export default function Order() {
             />
 
             <Modal
-                title='Agregar orden'
+                title={<p className='h5'>{position?.id_puesto ? 'Editar' : 'Agregar'} Puesto</p>}
                 open={modal}
                 centered
+                footer={null}
+                destroyOnClose
+                maskClosable={false}
                 onCancel={() => setModal(false)}
-                width={1200}
-                footer={false}
-                destroyOnClose={true}
             >
-                <OrderForm order={order} products={products} />
+                <PositionForm
+                    position={position}
+                    onClose={() => {
+                        handleGetAll();
+                        setModal(false);
+                    }}
+                />
             </Modal>
         </div>
     );

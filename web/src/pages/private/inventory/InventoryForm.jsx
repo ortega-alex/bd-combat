@@ -97,6 +97,7 @@ export default function InventoryForm({ inventory, onClose }) {
                                 autoClearSearchValue
                                 optionFilterProp='children'
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                style={{ maxWidth: 280 }}
                             >
                                 {products.map(item => {
                                     if (item.estado === '1')
@@ -147,6 +148,7 @@ export default function InventoryForm({ inventory, onClose }) {
                                 autoClearSearchValue
                                 optionFilterProp='children'
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                style={{ maxWidth: 280 }}
                             >
                                 {measures.map(item => {
                                     if (item.estado === '1')
@@ -187,6 +189,7 @@ export default function InventoryForm({ inventory, onClose }) {
                                 autoClearSearchValue
                                 optionFilterProp='children'
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                style={{ maxWidth: 280 }}
                             >
                                 {colors.map(item => {
                                     if (item.estado === '1')
