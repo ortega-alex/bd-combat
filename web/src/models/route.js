@@ -4,7 +4,8 @@ export const PrivateRotes = {
     USER: 'user',
     ORDER: 'order',
     INVENTORY: 'inventory',
-    POSITION: 'position'
+    POSITION: 'position',
+    EMPLOYEE: 'employee'
 };
 
 export const PublicRotes = {

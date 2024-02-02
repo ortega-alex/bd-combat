@@ -1,0 +1,26 @@
+
+### GET ALL
+GET {{protocol}}://{{host}}/api/{{version}}/employee
+Content-Type: application/json
+
+### GET BY ID   
+GET {{protocol}}://{{host}}/api/{{version}}/employee/1
+Content-Type: application/json
+
+
+### ADD OR UPDATE
+POST {{protocol}}://{{host}}/api/{{version}}/employee
+Content-Type: application/json
+
+{
+    "id_empleado": 0,
+    "id_puesto": 1,
+    "nombre": "Marlon Ortega",
+    "correo": "mortegalex27@gmail.com",
+    "celular": "324342343",
+    "telefono": "324342343",
+    "dpi": "abc123**",
+    "nit": "abc123**",
+    "fecha_nacimiento": "1989-04-23",
+    "estado": 1
+}

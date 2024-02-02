@@ -2,12 +2,15 @@ import { Router } from 'express';
 import {
     addOrUpdate,
     addOrUpdateColorCtr,
+    addOrUpdateEmployeeCtr,
     addOrUpdateInventoryCtr,
     addOrUpdateMeasureCtr,
     addOrUpdatePositionCtr,
     addOrUpdateProductCtr,
     getAll,
     getAllColorCtr,
+    getAllEmployeeByIdCtr,
+    getAllEmployeeCtr,
     getAllInventoryCtr,
     getAllMeasureCtr,
     getAllPositionsCtr,
@@ -33,5 +36,9 @@ route.post('/inventory', addOrUpdateInventoryCtr);
 
 route.get('/position', getAllPositionsCtr);
 route.post('/position', addOrUpdatePositionCtr);
+
+route.get('/employee', getAllEmployeeCtr);
+route.get('/employee/:id', getAllEmployeeByIdCtr);
+route.post('/employee', imagenUpload.single('nueva_imagen'), addOrUpdateEmployeeCtr);
 
 export default route;

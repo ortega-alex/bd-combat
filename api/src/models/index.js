@@ -1,4 +1,5 @@
 export * from './color.model';
+export * from './employee.model';
 export * from './inventory.model';
 export * from './measure.model';
 export * from './position.model';

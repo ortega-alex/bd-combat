@@ -4,6 +4,7 @@ import moment from 'moment';
 import { generateToken } from '../middleware';
 import { addOrUpdateUser, getUserById, getUserByUsername, getUsers } from '../models/user.model';
 import path from 'path';
+import { addOrUpdateEmployee } from '../models/employee.model';
 
 export const login = async (req, res) => {
     try {
@@ -37,7 +38,15 @@ export const getAll = async (_, res) => {
 export const addOrUpdate = async (req, res) => {
     try {
         const { file, body } = req;
-        const { id_usuario, nombre, correo, usuario, contrasenia, contrasenia_actual, imagen } = body;
+        const { id_usuario, nombre, correo, usuario, contrasenia, contrasenia_actual, imagen, id_empleado, estado } = body;
+        const id = id_usuario === null || id_usuario === 'null' || !id_usuario ? null : id_usuario;
+
+        if (!id) {
+            const user = await getUserByUsername(usuario);
+            if (Object.keys(user).length > 0)
+                return res.status(203).json({ error: true, message: 'El usuario ya se encuentra registrado' });
+        }
+
         let _imagen = null;
         if (file) {
             _imagen = `${file.path.replace(/\\/g, '/').split('public')[1]}`;
@@ -51,8 +60,8 @@ export const addOrUpdate = async (req, res) => {
         if (!usuario) return res.status(203).json({ error: true, message: 'El usuario es requerido' });
 
         let encodePass = null;
-        if (id_usuario) {
-            const user = await getUserById(id_usuario);
+        if (id) {
+            const user = await getUserById(id);
             encodePass = user.contrasenia;
             if (!_imagen) _imagen = user.imagen;
             if (contrasenia_actual) {
@@ -69,12 +78,19 @@ export const addOrUpdate = async (req, res) => {
 
         const _user = {
             ...body,
+            id_usuario: id,
+            estado: estado ?? '1',
             contrasenia: encodePass,
             imagen: _imagen
         };
-        const affectedRows = await addOrUpdateUser(_user);
-        const error = affectedRows > 0 ? false : true;
-        const title = id_usuario ? 'editar' : 'agregar';
+        const respose = await addOrUpdateUser(_user);
+
+        if (id_empleado && !id && respose.insertId) {
+            await addOrUpdateEmployee({ ..._user, id_usuario: respose.insertId });
+        }
+
+        const error = respose.affectedRows > 0 ? false : true;
+        const title = id ? 'editar' : 'agregar';
         res.status(200).json({
             error,
             usuario: _user,

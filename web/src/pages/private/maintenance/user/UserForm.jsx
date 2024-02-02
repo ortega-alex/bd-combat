@@ -11,12 +11,21 @@ export default function UserForm({ user, onClose }) {
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    const handleSyggestUser = value => {
+        console.log(user, value);
+        if (!user?.id_usuario) {
+            const usuario = value.split('@')[0];
+            formRef.current.setFieldsValue({ usuario });
+        }
+    };
+
     const handleOnSubmit = values => {
         setLoading(true);
         httpAddOrUpdateUser({
             ...user,
             ...values,
-            nueva_imagen: values?.avatar?.file?.originFileObj
+            nueva_imagen: values?.avatar?.file?.originFileObj,
+            estado: values.estado ? '1' : '0'
         })
             .then(res => {
                 message[res.error === false ? 'success' : 'warning'](res.message);
@@ -27,7 +36,15 @@ export default function UserForm({ user, onClose }) {
     };
 
     return (
-        <Form layout='vertical' onFinish={handleOnSubmit} initialValues={user} ref={formRef}>
+        <Form
+            layout='vertical'
+            onFinish={handleOnSubmit}
+            initialValues={{
+                ...user,
+                estado: !user?.estado || user?.estado === '1' ? true : false
+            }}
+            ref={formRef}
+        >
             <Form.Item name='avatar' valuePropName='file'>
                 <Upload
                     accept='.jpg, .png'
@@ -48,7 +65,7 @@ export default function UserForm({ user, onClose }) {
             </Form.Item>
 
             <Form.Item label='Nombre Completo' name='nombre' rules={[{ required: true, message: 'El campo es obligatorio' }]}>
-                <Input placeholder='Ingrese el nombre' />
+                <Input placeholder='Ingrese el nombre' disabled={user?.id_empleado} />
             </Form.Item>
             <div className='row'>
                 <Form.Item
@@ -69,11 +86,8 @@ export default function UserForm({ user, onClose }) {
                 >
                     <Input
                         placeholder='Ingrese un correo'
-                        onBlur={env => {
-                            const { value } = env.target;
-                            const usuario = value.split('@')[0];
-                            formRef.current.setFieldsValue({ usuario });
-                        }}
+                        onBlur={env => handleSyggestUser(env.target.value)}
+                        disabled={user?.id_empleado}
                     />
                 </Form.Item>
                 <Form.Item
@@ -82,7 +96,7 @@ export default function UserForm({ user, onClose }) {
                     name='usuario'
                     rules={[{ required: true, message: 'El campo es obligatorio' }]}
                 >
-                    <Input placeholder='Ingrese un correo' />
+                    <Input placeholder='Ingrese un correo' disabled={user?.id_usuario} />
                 </Form.Item>
             </div>
             <Form.Item name='estado' label='Estado' valuePropName='checked'>

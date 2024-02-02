@@ -1,52 +1,28 @@
 import { Icon } from '@/components';
-import { httpGetAllUsers } from '@/services/user.service';
-import { getDateFormat } from '@/utilities';
 import { Button, Modal, Table, Tooltip, message } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { UserForm } from '.';
-import { useDispatch, useSelector } from 'react-redux';
-import { modifySession } from '@/redux';
-import { sessionAdapter } from '@/adapters';
-import { useNavigate, useParams } from 'react-router-dom';
-import { httpGetAllEmployeeById } from '@/services';
-import { PrivateRotes } from '@/models';
+import EmployeeForm from './EmployeeForm';
+import { useEffect, useState } from 'react';
+import { httpGetAllEmployees, httpGetPositions } from '@/services';
+import { getDateFormat } from '@/utilities';
 
-export default function User() {
-    const sessionState = useSelector(store => store.session);
-    const dispath = useDispatch();
-    const { id_employee } = useParams();
-    const navigate = useNavigate();
-
-    const [users, setUsers] = useState([]);
-    const [user, setUser] = useState({});
-    const [modal, setModal] = useState(false);
+export default function Employee() {
+    const [employees, setEmployees] = useState([]);
+    const [employee, setEmployee] = useState({});
     const [loading, setLoading] = useState(false);
+    const [modal, setModal] = useState(false);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 100
     });
+    const [positions, setPositions] = useState([]);
 
-    const handleGetAll = () => {
-        setLoading(true);
-        httpGetAllUsers()
-            .then(res => setUsers(res))
-            .catch(err => message.error(`http error get all user: ${err.message}`))
-            .finally(() => setLoading(false));
-    };
-
-    const handleGetEmployee = async id => {
+    const handleGetAll = async () => {
         try {
             setLoading(true);
-            const res = await httpGetAllEmployeeById(id);
-            setUser({
-                ...res,
-                usuario: String(res.correo).split('@')[0],
-                fecha_nacimiento: getDateFormat(res.fecha_nacimiento, 'YYYY-MM-DD')
-            });
-            setModal(true);
-            navigate(`/${PrivateRotes.PRIVATE}/${PrivateRotes.USER}`, { replace: true });
+            const res = await httpGetAllEmployees();
+            setEmployees(res);
         } catch (error) {
-            message.error(`http error get employee by id: ${error.message}`);
+            message.error(`http erro get all employees: ${error.message}`);
         } finally {
             setLoading(false);
         }
@@ -54,7 +30,9 @@ export default function User() {
 
     useEffect(() => {
         handleGetAll();
-        if (id_employee) handleGetEmployee(id_employee);
+        httpGetPositions()
+            .then(res => setPositions(res?.filter(item => item.estado === '1')) ?? [])
+            .catch(err => message.error(`http error get positions: ${err.message}`));
     }, []);
 
     return (
@@ -64,12 +42,12 @@ export default function User() {
                     <Tooltip title='Actualizar'>
                         <Button type='link' className='text-secondary' icon={<Icon.Reload />} onClick={handleGetAll} />
                     </Tooltip>
-                    <p className='h5'>Usuarios</p>
+                    <p className='h5'>Empleados</p>
                 </div>
                 <Button
                     type='primary'
                     onClick={() => {
-                        setUser({});
+                        setEmployee({});
                         setModal(true);
                     }}
                 >
@@ -89,13 +67,12 @@ export default function User() {
                 scrollToFirstRowOnChange={true}
                 loading={loading}
                 showSorterTooltip={false}
-                rowKey='id_usuario'
-                dataSource={users}
+                rowKey='id_empleado'
+                dataSource={employees}
                 columns={[
-                    { title: 'No.', dataIndex: 'id_usuario', key: 'id_usuario', sorter: true },
-                    { title: 'Nombre.', dataIndex: 'nombre' },
-                    { title: 'Correo.', dataIndex: 'correo' },
-                    { title: 'Usuario.', dataIndex: 'usuario' },
+                    { title: 'No.', dataIndex: 'id_empleado', key: 'id_empleado', sorter: true, width: 80 },
+                    { title: 'Puesto.', dataIndex: 'puesto', sorter: true },
+                    { title: 'Nombre.', dataIndex: 'nombre', sorter: true, ellipsis: true },
                     { title: 'Estado.', dataIndex: '_estado' },
                     { title: 'Fecha', dataIndex: 'fecha_creacion', render: value => <span>{getDateFormat(value, 'DD/MM/YYYY')}</span> },
                     {
@@ -108,7 +85,7 @@ export default function User() {
                                     type='primary'
                                     size='small'
                                     onClick={() => {
-                                        setUser(item);
+                                        setEmployee(item);
                                         setModal(true);
                                     }}
                                 />
@@ -119,19 +96,19 @@ export default function User() {
             />
 
             <Modal
-                title={<p className='h5'>{user?.id_usuario ? 'Editar' : 'Agregar'} Usuario</p>}
+                title={<p className='h5'>{employee?.id_empleado ? 'Editar' : 'Agregar'} Empleado</p>}
                 open={modal}
                 centered
                 footer={null}
                 destroyOnClose
                 maskClosable={false}
                 onCancel={() => setModal(false)}
+                width={800}
             >
-                <UserForm
-                    user={user}
-                    onClose={usuario => {
-                        if (usuario.id_usuario && Number(usuario.id_usuario) === sessionState.id_sesion)
-                            dispath(modifySession(sessionAdapter(usuario)));
+                <EmployeeForm
+                    employee={employee}
+                    positions={positions}
+                    onClose={() => {
                         handleGetAll();
                         setModal(false);
                     }}

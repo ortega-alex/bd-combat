@@ -1,5 +1,4 @@
 import { Icon, Loading, Nav, RoutesWithNotFound } from '@/components';
-import { colors } from '@/models';
 import { PrivateRotes } from '@/models/route';
 import { Menu } from 'antd';
 import { lazy, useState } from 'react';
@@ -10,6 +9,7 @@ const Inventory = lazy(() => import('./inventory/Inventory'));
 
 const User = lazy(() => import('./maintenance/user/User'));
 const Position = lazy(() => import('./maintenance/position/Position'));
+const Employee = lazy(() => import('./maintenance/employee/Employee'));
 
 export default function Private() {
     const [loading, setLoading] = useState(false);
@@ -39,11 +39,11 @@ export default function Private() {
             label: 'Mantenimientos',
             children: [
                 {
-                    key: '2-1',
-                    icon: <Icon.User />,
+                    key: '2-3',
+                    icon: <Icon.Users />,
                     label: (
-                        <Link to={PrivateRotes.USER}>
-                            <span>Usuarios</span>
+                        <Link to={PrivateRotes.EMPLOYEE}>
+                            <span>Empleado</span>
                         </Link>
                     )
                 },
@@ -53,6 +53,15 @@ export default function Private() {
                     label: (
                         <Link to={PrivateRotes.POSITION}>
                             <span>Puesto</span>
+                        </Link>
+                    )
+                },
+                {
+                    key: '2-1',
+                    icon: <Icon.User />,
+                    label: (
+                        <Link to={PrivateRotes.USER}>
+                            <span>Usuarios</span>
                         </Link>
                     )
                 }
@@ -86,10 +95,15 @@ export default function Private() {
                                 </div>
                             }
                         />
-                        <Route path={PrivateRotes.USER} element={<User />} />
+
+                        {[PrivateRotes.USER, `${PrivateRotes.USER}/:id_employee`].map(item => (
+                            <Route key={item} path={item} element={<User />} />
+                        ))}
+
                         <Route path={PrivateRotes.ORDER} element={<Order />} />
                         <Route path={PrivateRotes.INVENTORY} element={<Inventory />} />
                         <Route path={PrivateRotes.POSITION} element={<Position />} />
+                        <Route path={PrivateRotes.EMPLOYEE} element={<Employee />} />
                     </RoutesWithNotFound>
                 )}
             </div>

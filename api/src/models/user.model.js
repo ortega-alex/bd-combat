@@ -29,18 +29,19 @@ export const getUserByUsername = async usuario => {
     return res.length > 0 ? res[0] : null;
 };
 
-export const addOrUpdateUser = async ({ id_usuario, nombre, correo, usuario, contrasenia, estado = 1, imagen }) => {
-    const strQuery = `  INSERT INTO usuario (id_usuario, nombre, correo, usuario, contrasenia) 
-                        VALUES (?, ?, ?, ?, ?) AS val
+export const addOrUpdateUser = async ({ id_usuario, nombre, correo, usuario, contrasenia, estado, imagen }) => {
+    const strQuery = `  INSERT INTO usuario (id_usuario, nombre, correo, usuario, contrasenia,
+                                             imagen, estado) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?) AS val
                         ON DUPLICATE KEY UPDATE
                         nombre = val.nombre,
                         correo = val.correo,
                         usuario = val.usuario,
                         contrasenia = val.contrasenia,
-                        estado = ?,
-                        imagen = ?,
+                        estado = val.estado,
+                        imagen = val.imagen,
                         fecha_edicion = CURRENT_TIMESTAMP()`;
-    const res = await executeQuery(strQuery, [id_usuario, nombre, correo, usuario, contrasenia, estado, imagen]);
+    const res = await executeQuery(strQuery, [id_usuario, nombre, correo, usuario, contrasenia, imagen, estado]);
     if (res.error) throw res.error.sqlMessage;
-    return res.affectedRows;
+    return res;
 };

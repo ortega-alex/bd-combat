@@ -26,3 +26,11 @@ dayjs.extend(weekYear);
  * @returns {String}
  */
 export const getDateFormat = (date, format = 'DD/MM/YYYY HH:MM') => dayjs(date ?? undefined).format(format);
+
+/**
+ *
+ * @param {String} text
+ * @param {String} formatReq
+ * @returns {Dayjs}
+ */
+export const getDateFromString = (text, format = 'YYYY/MM/DD') => dayjs(dayjs(text, format));
