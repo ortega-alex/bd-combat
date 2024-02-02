@@ -1,0 +1,31 @@
+### GET ALL
+GET {{protocol}}://{{host}}/api/{{version}}/order
+Content-Type: application/json
+
+### GET DETAIL
+GET {{protocol}}://{{host}}/api/{{version}}/order/detail/1
+Content-Type: application/json
+
+### ADD OR UPDATE
+POST  {{protocol}}://{{host}}/api/{{version}}/order
+Content-Type: application/json
+
+{
+    "direccion": "ciudad",
+    "fecha": "2024-02-02",
+    "id_vendedor": 3,
+    "nit": "57404380",
+    "nombre": "pablo",
+    "no_factura": "038",
+    "detalle": [{
+        "cantidad": 10,
+        "color":"Azul",
+        "detalle":"Guantes | SM | Azul",
+        "disponible":19,
+        "id_producto":1,
+        "medida":"SM",
+        "precio_venta":120,
+        "producto":"Guantes",
+        "subtotal":120
+    }]
+}

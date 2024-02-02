@@ -31,7 +31,8 @@ export default function EmployeeForm({ employee, positions, onClose }) {
                 ...values,
                 fecha_nacimiento: values.fecha_nacimiento.format('YYYY-MM-DD'),
                 estado: values.estado ? 1 : 0,
-                nueva_imagen: values?.avatar?.file?.originFileObj
+                nueva_imagen: values?.avatar?.file?.originFileObj,
+                carpeta: PrivateRotes.EMPLOYEE
             });
             message[res.error === false ? 'success' : 'warning'](res.message);
             if (res.error === false) onClose();

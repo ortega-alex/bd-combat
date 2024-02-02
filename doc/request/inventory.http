@@ -2,6 +2,10 @@
 GET {{protocol}}://{{host}}/api/{{version}}/inventory
 Content-Type: application/json
 
+### GET STOCK
+GET {{protocol}}://{{host}}/api/{{version}}/inventory/stock
+Content-Type: application/json
+
 ### ADD OR UPDATE
 POST  {{protocol}}://{{host}}/api/{{version}}/inventory
 Content-Type: application/json

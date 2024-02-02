@@ -4,8 +4,8 @@ import fs from 'fs';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const { usuario } = req.body;
-        const route = path.join(__dirname, `../public/${usuario ? 'users' : 'orders'}/`);
+        const { carpeta } = req.body;
+        const route = path.join(__dirname, `../public/${carpeta ?? 'orders'}/`);
         if (!fs.existsSync(route)) fs.mkdirSync(route);
         cb(null, route);
     },

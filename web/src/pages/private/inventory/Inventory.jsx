@@ -83,7 +83,7 @@ export default function Inventory() {
                 columns={[
                     { title: 'No.', dataIndex: 'id_inventario' },
                     { title: 'Producto', dataIndex: 'producto' },
-                    { title: 'Disponible.', dataIndex: 'cantidad' },
+                    { title: 'Disponible.', dataIndex: 'disponible' },
                     { title: 'Precio Venta.', dataIndex: 'precio_venta' },
                     { title: 'Medida', dataIndex: 'medida' },
                     { title: 'Color', dataIndex: 'color' },

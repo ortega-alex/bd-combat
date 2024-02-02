@@ -10,6 +10,12 @@ export const httpGetInventory = async () => await httpRequest(path);
 
 /**
  *
+ * @returns {Promise}
+ */
+export const httpGetStock = async () => await httpRequest(`${path}/stock`);
+
+/**
+ *
  * @param {Object} body
  * @returns {Promise}
  */

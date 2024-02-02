@@ -1,27 +1,9 @@
 import { Icon } from '@/components';
-import { getDateFormat } from '@/utilities';
-import { Button, Input, Modal, Table, Tooltip } from 'antd';
+import { httpGetEmployeesByPositionId, httpGetOrders } from '@/services';
+import { commaSeparateNumber, getDateFormat } from '@/utilities';
+import { Button, Input, Modal, Table, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { OrderForm } from '.';
-
-const data = [
-    {
-        sku: '1212323',
-        nombre: 'producto x',
-        resumen: 'producto x | mediano | negro',
-        medida: 'grande',
-        color: 'negro',
-        precio: 100
-    },
-    {
-        sku: '3453454',
-        nombre: 'producto y',
-        resumen: 'producto y | mediano | azul',
-        medida: 'grande',
-        color: 'azul',
-        precio: 120
-    }
-];
 
 export default function Order() {
     const [modal, setModal] = useState(false);
@@ -32,13 +14,21 @@ export default function Order() {
         current: 1,
         pageSize: 100
     });
-    const [products, setProducts] = useState(data);
+    const [sellers, setSellers] = useState([]);
 
-    const handleGetAll = () => {};
+    const handleGetAll = () => {
+        setLoading(true);
+        httpGetOrders()
+            .then(res => setOrders(res))
+            .catch(err => message.error(`http error get orders: ${err.message}`))
+            .finally(() => setLoading(false));
+    };
 
     useEffect(() => {
         handleGetAll();
-        setProducts(data);
+        httpGetEmployeesByPositionId(1)
+            .then(res => setSellers(res))
+            .catch(err => message.error(`http get sellers: ${err.message}`));
     }, []);
 
     return (
@@ -77,10 +67,11 @@ export default function Order() {
                 rowKey='id_orden'
                 dataSource={orders}
                 columns={[
-                    { title: 'No.', dataIndex: 'id_inventario' },
-                    { title: 'Productos', dataIndex: 'productos' },
-                    { title: 'Total.', dataIndex: 'total' },
-                    { title: 'Cliente', dataIndex: 'cliente' },
+                    { title: 'No.', dataIndex: 'id_orden' },
+                    { title: 'Numero de factura', dataIndex: 'no_factura' },
+                    { title: 'Total.', dataIndex: 'total', align: 'right', render: value => <span>{commaSeparateNumber(value)}</span> },
+                    { title: 'Vendedor', dataIndex: 'vendedor' },
+                    { title: 'Cliente', dataIndex: 'nombre' },
                     { title: 'Direccion', dataIndex: 'direccion' },
                     { title: 'Fecha', dataIndex: 'fecha_creacion', render: value => <span>{getDateFormat(value, 'DD/MM/YYYY')}</span> },
                     {
@@ -93,7 +84,7 @@ export default function Order() {
                                     type='primary'
                                     size='small'
                                     onClick={() => {
-                                        setUser(item);
+                                        setOrder(item);
                                         setModal(true);
                                     }}
                                 />
@@ -112,7 +103,14 @@ export default function Order() {
                 footer={false}
                 destroyOnClose={true}
             >
-                <OrderForm order={order} products={products} />
+                <OrderForm
+                    order={order}
+                    sellers={sellers}
+                    onClose={() => {
+                        handleGetAll();
+                        setModal(false);
+                    }}
+                />
             </Modal>
         </div>
     );

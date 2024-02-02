@@ -1,7 +1,7 @@
 import { CustomMaintenance, Icon } from '@/components';
 import { httpAddOrUpdateInventory, httpGetColor, httpGetMeasure, httpGetProducts } from '@/services';
 import { Button, Form, Input, InputNumber, Modal, Select, message } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ColorFrom, MeasureFrom, ProducFrom } from '../maintenance';
 import { useSelector } from 'react-redux';
 
@@ -15,6 +15,7 @@ export default function InventoryForm({ inventory, onClose }) {
         children: null,
         list: []
     };
+    const formRef = useRef();
 
     const [products, setProducts] = useState([]);
     const [measures, setMeasures] = useState([]);
@@ -82,53 +83,65 @@ export default function InventoryForm({ inventory, onClose }) {
 
     return (
         <>
-            <Form layout='vertical' onFinish={handleSubmit} initialValues={inventory}>
-                <div className='flex flex-row justify-between gap-3'>
-                    <div className='flex items-center gap-1 w-50'>
-                        <Form.Item
-                            className='flex-1'
-                            label='Producto'
-                            name='id_producto'
-                            rules={[{ required: true, message: 'El campo es obligatorio' }]}
+            <Form layout='vertical' onFinish={handleSubmit} initialValues={inventory} ref={formRef}>
+                <div className='flex items-center gap-1 w-100'>
+                    <Form.Item
+                        className='flex-1'
+                        label='Producto'
+                        name='id_producto'
+                        rules={[{ required: true, message: 'El campo es obligatorio' }]}
+                    >
+                        <Select
+                            placeholder='Seleccione una opción'
+                            showSearch
+                            autoClearSearchValue
+                            optionFilterProp='children'
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
-                            <Select
-                                placeholder='Seleccione una opción'
-                                showSearch
-                                autoClearSearchValue
-                                optionFilterProp='children'
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                style={{ maxWidth: 280 }}
-                            >
-                                {products.map(item => {
-                                    if (item.estado === '1')
-                                        return (
-                                            <Select.Option key={item.id_producto} value={item.id_producto}>
-                                                {item.producto}
-                                            </Select.Option>
-                                        );
-                                    return null;
-                                })}
-                            </Select>
-                        </Form.Item>
-                        <Button
-                            type='primary'
-                            icon={<Icon.Plus />}
-                            onClick={() =>
-                                handleChangeCustomer({
-                                    title: 'Productos',
-                                    list: products.map(item => ({
-                                        ...item,
-                                        name: item.producto
-                                    })),
-                                    children: 1
-                                })
-                            }
-                        />
-                    </div>
+                            {products.map(item => {
+                                if (item.estado === '1')
+                                    return (
+                                        <Select.Option key={item.id_producto} value={item.id_producto}>
+                                            {item.producto}
+                                        </Select.Option>
+                                    );
+                                return null;
+                            })}
+                        </Select>
+                    </Form.Item>
+                    <Button
+                        type='primary'
+                        icon={<Icon.Plus />}
+                        onClick={() =>
+                            handleChangeCustomer({
+                                title: 'Productos',
+                                list: products.map(item => ({
+                                    ...item,
+                                    name: item.producto
+                                })),
+                                children: 1
+                            })
+                        }
+                    />
+                </div>
+                <div className='flex flex-row justify-between gap-3'>
                     <Form.Item
                         className='w-50'
                         label='Cantidad'
                         name='cantidad'
+                        rules={[{ required: true, message: 'El campo es obligatorio' }]}
+                    >
+                        <InputNumber
+                            min={1}
+                            placeholder='Cantidad de producto'
+                            className='w-100'
+                            onBlur={env => formRef.current.setFieldsValue({ disponible: env.target.value })}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        className='w-50'
+                        label='Disponible'
+                        name='disponible'
                         rules={[{ required: true, message: 'El campo es obligatorio' }]}
                     >
                         <InputNumber min={1} placeholder='Cantidad de producto' className='w-100' />

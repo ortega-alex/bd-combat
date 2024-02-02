@@ -34,3 +34,16 @@ export const getDateFormat = (date, format = 'DD/MM/YYYY HH:MM') => dayjs(date ?
  * @returns {Dayjs}
  */
 export const getDateFromString = (text, format = 'YYYY/MM/DD') => dayjs(dayjs(text, format));
+
+/**
+ * number separated by commas, returns two decimal places
+ * @param {String | Number} number
+ * @returns {Number}
+ */
+export const commaSeparateNumber = number => {
+    number = parseFloat(String(number)).toFixed(2);
+    while (/(\d+)(\d{3})/.test(number)) {
+        number = String(number).replace(/(\d+)(\d{3})/, '$1,$2');
+    }
+    return number;
+};

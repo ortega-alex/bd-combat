@@ -21,6 +21,18 @@ export const getEmployeeById = async id => {
     return res.length > 0 ? res[0] : {};
 };
 
+export const getEmployeesByPositions = async id => {
+    const strQuery = `  SELECT a.id_empleado, a.nombre, 
+                            b.id_puesto, b.puesto 
+                        FROM empleado a 
+                        INNER JOIN puesto b ON a.id_puesto = b.id_puesto 
+                        WHERE a.id_puesto = ?
+                        ORDER BY a.nombre;`;
+    const res = await executeQuery(strQuery, [id]);
+    if (res.error) throw res.error.sqlMessage;
+    return res;
+};
+
 export const addOrUpdateEmployee = async ({
     id_empleado,
     id_puesto,

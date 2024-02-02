@@ -1,11 +1,21 @@
 import fs from 'fs';
 import path from 'path';
-import { addOrUpdateEmployee, getEmployeeById, getEmployees } from '../models';
+import { addOrUpdateEmployee, getEmployeeById, getEmployees, getEmployeesByPositions } from '../models';
 
 export const getAllEmployeeCtr = async (_, res) => {
     try {
-        const users = await getEmployees();
-        res.status(200).json(users);
+        const employees = await getEmployees();
+        res.status(200).json(employees);
+    } catch (error) {
+        return res.status(500).json({ message: 'Ha ocurrido un error interno', error });
+    }
+};
+
+export const getAllEmployeeByPositionIdCtr = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const employees = await getEmployeesByPositions(id);
+        res.status(200).json(employees);
     } catch (error) {
         return res.status(500).json({ message: 'Ha ocurrido un error interno', error });
     }

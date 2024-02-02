@@ -7,6 +7,10 @@ Content-Type: application/json
 GET {{protocol}}://{{host}}/api/{{version}}/employee/1
 Content-Type: application/json
 
+### GET BY ID   
+GET {{protocol}}://{{host}}/api/{{version}}/employee/position/1
+Content-Type: application/json
+
 
 ### ADD OR UPDATE
 POST {{protocol}}://{{host}}/api/{{version}}/employee

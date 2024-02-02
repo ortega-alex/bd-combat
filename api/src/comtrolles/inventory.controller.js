@@ -1,9 +1,18 @@
-import { addOrUpdateInventory, getAllInventory } from '../models';
+import { addOrUpdateInventory, getAllInventory, getStock } from '../models';
 
 export const getAllInventoryCtr = async (_, res) => {
     try {
-        const users = await getAllInventory();
-        res.status(200).json(users);
+        const inventories = await getAllInventory();
+        res.status(200).json(inventories);
+    } catch (error) {
+        return res.status(500).json({ message: 'Ha ocurrido un error interno', error });
+    }
+};
+
+export const getStockCtr = async (_, res) => {
+    try {
+        const inventories = await getStock();
+        res.status(200).json(inventories);
     } catch (error) {
         return res.status(500).json({ message: 'Ha ocurrido un error interno', error });
     }

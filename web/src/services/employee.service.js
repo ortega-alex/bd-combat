@@ -17,6 +17,13 @@ export const httpGetAllEmployeeById = async id => await httpRequest(`${path}/${i
 
 /**
  *
+ * @param {Number} id
+ * @returns {Promise}
+ */
+export const httpGetEmployeesByPositionId = async id => await httpRequest(`${path}/position/${id}`);
+
+/**
+ *
  * @param {Object} body
  * @returns {Promise}
  */

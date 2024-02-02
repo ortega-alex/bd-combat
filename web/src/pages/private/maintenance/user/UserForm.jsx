@@ -1,5 +1,5 @@
 import { Icon } from '@/components';
-import { _SERVER, colors } from '@/models';
+import { PrivateRotes, _SERVER, colors } from '@/models';
 import { httpAddOrUpdateUser } from '@/services/user.service';
 import { mailIsValied } from '@/utilities';
 import { Avatar, Button, Form, Input, Switch, Upload, message } from 'antd';
@@ -25,7 +25,8 @@ export default function UserForm({ user, onClose }) {
             ...user,
             ...values,
             nueva_imagen: values?.avatar?.file?.originFileObj,
-            estado: values.estado ? '1' : '0'
+            estado: values.estado ? '1' : '0',
+            carpeta: PrivateRotes.USER
         })
             .then(res => {
                 message[res.error === false ? 'success' : 'warning'](res.message);
